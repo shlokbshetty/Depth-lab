@@ -167,7 +167,7 @@ export const BenchmarkStudioPage: React.FC = () => {
   const [sceneIdx, setSceneIdx] = useState<number>(0);
 
   // Sidebar Controls matching app.py
-  const [scale, setScale] = useState<number>(4);
+  const scale = 4;
   const [sparsity, setSparsity] = useState<number>(0.36);
   const [shadows, setShadows] = useState<boolean>(true);
   const [noise, setNoise] = useState<number>(0.015);
@@ -634,35 +634,6 @@ export const BenchmarkStudioPage: React.FC = () => {
                 ))}
               </div>
             )}
-          </div>
-
-          {/* Upsampling Factor Slider */}
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '6px' }}>
-              <span style={{ color: '#9CA3AF' }}>Upsampling Factor</span>
-              <span style={{ fontWeight: 600, color: '#3B82F6' }}>{scale}×</span>
-            </div>
-            <div style={{ display: 'flex', gap: '6px' }}>
-              {[2, 4, 8].map((fac) => (
-                <button
-                  key={fac}
-                  onClick={() => setScale(fac)}
-                  style={{
-                    flex: 1,
-                    padding: '6px',
-                    borderRadius: '6px',
-                    border: 'none',
-                    backgroundColor: scale === fac ? '#3B82F6' : 'rgba(255, 255, 255, 0.06)',
-                    color: scale === fac ? '#FFFFFF' : '#9CA3AF',
-                    fontSize: '11.5px',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                  }}
-                >
-                  {fac}×
-                </button>
-              ))}
-            </div>
           </div>
 
           {/* Missing Depth Ratio (Sparsity) Slider */}
