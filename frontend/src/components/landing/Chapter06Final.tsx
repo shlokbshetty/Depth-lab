@@ -52,7 +52,7 @@ export const Chapter06Final: React.FC = () => {
 
         {/* Large Ring CTA Button (01-landing.md §D line 70) */}
         <Link
-          to="/app"
+          to="/studio"
           style={{
             width: '180px',
             height: '180px',
@@ -76,7 +76,7 @@ export const Chapter06Final: React.FC = () => {
               letterSpacing: '0.04em',
             }}
           >
-            Open workspace
+            Open studio
           </span>
           <ArrowUpRight size={18} strokeWidth={1.5} />
         </Link>
@@ -120,8 +120,8 @@ export const Chapter06Final: React.FC = () => {
           <a href="#ch04" className="type-label" style={{ color: 'var(--ink)' }}>
             Benchmark
           </a>
-          <Link to="/app" className="type-label" style={{ color: 'var(--ink)' }}>
-            Workspace
+          <Link to="/studio" className="type-label" style={{ color: 'var(--ink)' }}>
+            Studio
           </Link>
         </div>
 

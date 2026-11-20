@@ -10,7 +10,6 @@ import {
   Activity,
   Check,
   ChevronDown,
-  ExternalLink,
   Zap,
   RefreshCw,
   Info,
@@ -479,26 +478,6 @@ export const BenchmarkStudioPage: React.FC = () => {
             <Upload size={13} />
             <span>Upload Capture</span>
           </button>
-
-          <Link
-            to="/app"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '7px 16px',
-              borderRadius: '999px',
-              backgroundColor: '#FFFFFF',
-              color: '#08090C',
-              textDecoration: 'none',
-              fontSize: '12px',
-              fontWeight: 600,
-            }}
-          >
-            <Box size={13} />
-            <span>Move to 3D Viewport</span>
-            <ExternalLink size={12} />
-          </Link>
         </div>
       </header>
 

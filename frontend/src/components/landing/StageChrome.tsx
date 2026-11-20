@@ -143,9 +143,9 @@ export const StageChrome: React.FC<StageChromeProps> = ({
             </span>
           </button>
 
-          {/* Launch workspace button */}
+          {/* Launch studio button */}
           <Link
-            to="/app"
+            to="/studio"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -158,7 +158,7 @@ export const StageChrome: React.FC<StageChromeProps> = ({
               color: 'var(--ink)',
             }}
           >
-            Launch workspace
+            Studio & Benchmarks
             <ArrowUpRight size={13} strokeWidth={1.5} />
           </Link>
         </div>

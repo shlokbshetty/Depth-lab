@@ -56,3 +56,7 @@ scratch/
 Thumbs.db
 .idea/
 .vscode/
+
+# Presentations & slides
+DepthLab_P4_Presentation.pptx
+*.pptx

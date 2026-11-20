@@ -1,6 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowUpRight } from 'lucide-react';
 
 const METHODS = [
   {
@@ -222,24 +220,6 @@ export const Chapter04Comparison: React.FC = () => {
                     <span className="type-mono">{m.time}</span>
                   </div>
                 </div>
-
-                {/* Deep Link to Workspace with Method preselected */}
-                <Link
-                  to={`/app?method=${m.id}`}
-                  style={{
-                    marginTop: 'var(--space-3)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    fontSize: '10.5px',
-                    color: 'var(--ink)',
-                    borderTop: '1px solid var(--hairline)',
-                    paddingTop: '6px',
-                  }}
-                >
-                  <span>Open in /app</span>
-                  <ArrowUpRight size={12} strokeWidth={1.5} />
-                </Link>
               </div>
             </div>
           ))}

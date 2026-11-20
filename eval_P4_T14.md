@@ -65,20 +65,26 @@ flowchart TD
 
 2. **Mask-Bicubic Upsampling (Stage 1 — `MaskBicubicUpsampler`)**:
    - Standard interpolation (`Bicubic`) and Gaussian filtering (`JBF`) blur across occlusion jumps, creating intermediate "flying pixels" in 3D space.
-   - `MaskBicubicUpsampler` blends bicubic spatial weights $w_{\text{bicubic}}(p,q)$ with foreground/background partition masks $\mathbb{I}(M(p) == M(q))$ and RGB edge-stopping weights $w_{\text{edge}}(I_p, I_q)$:
-     $$D_{\text{Mask-Bicubic}}(p) = \frac{\sum_{q \in \mathcal{N}(p)} w_{\text{bicubic}}(p,q) \cdot \mathbb{I}(M(p) == M(q)) \cdot w_{\text{edge}}(I_p, I_q) \cdot D_{LR}(q)}{\sum_{q \in \mathcal{N}(p)} w_{\text{bicubic}}(p,q) \cdot \mathbb{I}(M(p) == M(q)) \cdot w_{\text{edge}}(I_p, I_q)}$$
+   - `MaskBicubicUpsampler` blends bicubic spatial weights $w_{\text{bicubic}}(p,q)$ with foreground/background partition masks $[M(p) = M(q)]$ and RGB edge-stopping weights $w_{\text{edge}}(I_p, I_q)$:
+
+   $$
+   D_{\text{Mask-Bicubic}}(p) = \frac{\sum_{q \in \mathcal{N}(p)} w_{\text{bicubic}}(p,q) \cdot [M(p) = M(q)] \cdot w_{\text{edge}}(I_p, I_q) \cdot D_{\text{LR}}(q)}{\sum_{q \in \mathcal{N}(p)} w_{\text{bicubic}}(p,q) \cdot [M(p) = M(q)] \cdot w_{\text{edge}}(I_p, I_q)}
+   $$
 
 3. **Continuous Coordinate Cross-Attention (LoftUp) & Foundation Structural Prior (PatchRefiner)**:
    - `ContinuousCoordCrossAttentionUpsampler` encodes continuous sub-pixel relative offsets $(\delta_x, \delta_y)$ with 2D sinusoidal Fourier features so HR RGB queries attend over $3\times 3$ LR depth feature neighborhoods across $2\times, 4\times, 8\times$ scales without deconvolution checkerboard artifacts.
-   - `FoundationStructuralPriorAdapter` extracts dense relative geometry from RGB and aligns it to metric `LR GT` depth via **Locally Weighted Least-Squares (LWLS)** scale-shift alignment ($\hat{D}_{\text{prior}}(p) = a(p) P_{\text{rel}}(p) + b(p)$).
+   - `FoundationStructuralPriorAdapter` extracts dense relative geometry from RGB and aligns it to metric `LR GT` depth via **Locally Weighted Least-Squares (LWLS)** scale-shift alignment ($\hat{D}_{\text{prior}}(p) = a(p) \cdot P_{\text{rel}}(p) + b(p)$).
 
 4. **Edge-Gated Cross-Attention (EGCA) for Texture-Copy Suppression**:
    - `EG-DepthNet` computes a physical + learned **Coherence Gate** $G_{\text{edge}} \in [0, 1]$ from the ratio of local 3D depth span to depth magnitude. Where the 3D surface is planar ($\text{span} \ll \tau_d$), $G_{\text{edge}} \to 0$ suppresses RGB feature injection, preventing wallpaper/checkerboard texture copying.
 
 5. **Detail & Scale Disentangling (DSD) + Self-Distillation Loss (`GeometryAwareDepthLoss`)**:
-   $$\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{Charbonnier}}(D, D_{GT}) + \lambda_{\text{grad}} \mathcal{L}_{\text{grad-log}}(\nabla D, \nabla D_{GT}) + \lambda_{\text{rank}} \mathcal{L}_{\text{edge-ranking}} + \lambda_{\text{distill}} \mathcal{L}_{\text{affinity}}(F_{\text{student}}, F_{\text{teacher}})$$
 
-6. **Depth Boundary Error ($\varepsilon^{\text{acc}}_{\text{DBE}}$ & $\varepsilon^{\text{comp}}_{\text{DBE}}$) & INT8 Quantization**:
+   $$
+   \mathcal{L}_{\text{total}} = \mathcal{L}_{\text{Charbonnier}}(D, D_{\text{GT}}) + \lambda_{\text{grad}} \mathcal{L}_{\text{grad-log}}(\nabla D, \nabla D_{\text{GT}}) + \lambda_{\text{rank}} \mathcal{L}_{\text{edge-ranking}} + \lambda_{\text{distill}} \mathcal{L}_{\text{affinity}}(F_{\text{student}}, F_{\text{teacher}})
+   $$
+
+6. **Depth Boundary Error** ($\varepsilon^{\text{acc}}_{\text{DBE}}$ & $\varepsilon^{\text{comp}}_{\text{DBE}}$) **& INT8 Quantization**:
    - Evaluates Truncated Chamfer Distance via Euclidean Distance Transform (`cv2.distanceTransform`) between predicted and ground-truth depth discontinuity edges (`compute_dbe_metrics`).
    - Compresses `Conv2d` weights from FP32 (`5.31 MB`) to symmetric per-channel INT8 (`1.34 MB`, **3.96× compression ratio**) with `< 0.002 m` RMSE difference.
 
@@ -222,8 +228,8 @@ Reproducible via `uv run python scripts/run_ablation.py`:
 
 ## 6. Documented Failure Cases & Limitations Analysis
 
-1. **Camouflaged / Iso-Color Occlusion Boundaries ($\|\mathbf{c}_{fg} - \mathbf{c}_{bg}\| \to 0$)**:
-   - *Phenomenon*: When a foreground object has the exact same RGB color and luminance as the background wall behind it, RGB-guided bilateral mode snapping cannot determine the sub-pixel boundary location from color alone ($w_{fg} \approx 0.5$).
+1. **Camouflaged / Iso-Color Occlusion Boundaries** ($\|\mathbf{c}_{\text{fg}} - \mathbf{c}_{\text{bg}}\| \to 0$):
+   - *Phenomenon*: When a foreground object has the exact same RGB color and luminance as the background wall behind it, RGB-guided bilateral mode snapping cannot determine the sub-pixel boundary location from color alone ($w_{\text{fg}} \approx 0.5$).
    - *Behavior*: The system gracefully falls back to the Sparsity-Aware geometric depth stream (`fd1`, `fd2`) and ASPN spatial propagation without introducing artifacts, though sub-pixel edge sharpness approaches bicubic resolution.
 2. **High-Contrast Cast Shadows Across Planar Surfaces**:
    - *Phenomenon*: Sharp illumination shadows on a floor create a step edge in RGB luminance alongside small sensor noise in depth.
