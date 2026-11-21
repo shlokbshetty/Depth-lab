@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 // Code-split route bundles for lightning-fast sub-100ms first paint
 const LandingV3 = lazy(() => import('./pages/v3/LandingV3').then(m => ({ default: m.LandingV3 })));
-const WorkspaceV3 = lazy(() => import('./pages/v3/WorkspaceV3').then(m => ({ default: m.WorkspaceV3 })));
 const BenchmarkStudioPage = lazy(() => import('./pages/benchmark/BenchmarkStudioPage').then(m => ({ default: m.BenchmarkStudioPage })));
 
 const RouteFallback: React.FC = () => (
@@ -32,7 +31,6 @@ export const App: React.FC = () => {
         <Routes>
           {/* Canonical routes */}
           <Route path="/" element={<LandingV3 />} />
-          <Route path="/app" element={<WorkspaceV3 />} />
 
           {/* Dedicated CV Reconstruction Studio & Benchmark Evaluation Dashboard */}
           <Route path="/studio" element={<BenchmarkStudioPage />} />
@@ -40,12 +38,13 @@ export const App: React.FC = () => {
           <Route path="/evaluation" element={<BenchmarkStudioPage />} />
 
           {/* Legacy route redirects */}
+          <Route path="/app" element={<Navigate to="/studio" replace />} />
+          <Route path="/v3/app" element={<Navigate to="/studio" replace />} />
+          <Route path="/v1/app" element={<Navigate to="/studio" replace />} />
+          <Route path="/v2/app" element={<Navigate to="/studio" replace />} />
           <Route path="/v3" element={<Navigate to="/" replace />} />
-          <Route path="/v3/app" element={<Navigate to="/app" replace />} />
           <Route path="/v1" element={<Navigate to="/" replace />} />
-          <Route path="/v1/app" element={<Navigate to="/app" replace />} />
           <Route path="/v2" element={<Navigate to="/" replace />} />
-          <Route path="/v2/app" element={<Navigate to="/app" replace />} />
 
           {/* Catch-all */}
           <Route path="*" element={<Navigate to="/" replace />} />

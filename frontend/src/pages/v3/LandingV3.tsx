@@ -324,31 +324,12 @@ export const LandingV3: React.FC = () => {
               >
                 <Box size={11} color="#FFFFFF" />
               </div>
-              <span style={{ fontWeight: 600, color: '#0F1117', fontSize: '13.5px' }}>Spatial Depth</span>
+              <span style={{ fontWeight: 600, color: '#0F1117', fontSize: '13.5px' }}>DepthLab</span>
             </div>
 
             {/* Benchmarks Studio Link */}
             <Link
               to="/studio"
-              style={{
-                fontSize: '12.5px',
-                fontWeight: 600,
-                color: '#0F1117',
-                textDecoration: 'none',
-                padding: '4px 8px',
-                borderRadius: '6px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-              }}
-            >
-              <Activity size={12} />
-              <span>Studio & Benchmarks</span>
-            </Link>
-
-            {/* Direct CTA into 3D Depth Studio */}
-            <Link
-              to="/app"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -364,7 +345,8 @@ export const LandingV3: React.FC = () => {
                 transition: 'transform 0.15s ease',
               }}
             >
-              <span>Open 3D Studio</span>
+              <Activity size={13} color="#FFFFFF" />
+              <span>Studio & Benchmarks</span>
               <ArrowUpRight size={13} />
             </Link>
           </nav>
@@ -541,29 +523,7 @@ export const LandingV3: React.FC = () => {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
-                  padding: '7px 14px',
-                  borderRadius: '999px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                  color: '#FFFFFF',
-                  textDecoration: 'none',
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  border: '1px solid rgba(255, 255, 255, 0.18)',
-                  whiteSpace: 'nowrap',
-                  transition: 'background 0.15s ease',
-                }}
-              >
-                <Layers size={13} />
-                <span>Benchmarks</span>
-              </Link>
-
-              <Link
-                to="/app"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '7px 16px',
+                  padding: '7px 18px',
                   borderRadius: '999px',
                   backgroundColor: '#FFFFFF',
                   color: '#08090C',
@@ -572,9 +532,11 @@ export const LandingV3: React.FC = () => {
                   fontWeight: 600,
                   boxShadow: '0 4px 14px rgba(255, 255, 255, 0.25)',
                   whiteSpace: 'nowrap',
+                  transition: 'opacity 0.15s ease',
                 }}
               >
-                <span>3D Viewport</span>
+                <Layers size={13} />
+                <span>Launch Benchmarks</span>
                 <ArrowUpRight size={13} />
               </Link>
             </div>
